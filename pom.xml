@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.meter</groupId>
+    <artifactId>smart-monitor-app</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <javafx.version>17.0.2</javafx.version>
+    </properties>
+
+    <dependencies>
+        <!-- JavaFX -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- Gurux DLMS -->
+        <dependency>
+            <groupId>org.gurux</groupId>
+            <artifactId>gurux.dlms</artifactId>
+            <version>4.0.89</version>
+        </dependency>
+
+        <!-- Gurux Serial (for RS485) -->
+        <dependency>
+            <groupId>org.gurux</groupId>
+            <artifactId>gurux.serial</artifactId>
+            <version>1.0.30</version>
+        </dependency>
+
+        <!-- Gurux Common -->
+        <dependency>
+            <groupId>org.gurux</groupId>
+            <artifactId>gurux.common</artifactId>
+            <version>1.0.17</version>
+        </dependency>
+
+        <!-- Gurux Net -->
+        <dependency>
+            <groupId>org.gurux</groupId>
+            <artifactId>gurux.net</artifactId>
+            <version>1.0.28</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.45.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scream3r</groupId>
+            <artifactId>jssc</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>25</source>
+                    <target>25</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>com.meter.Main</mainClass>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <name>SmartMonitorApp</name>
+                    <appVersion>1.0.0</appVersion>
+                    <mainClass>com.meter.Main</mainClass>
+                    <mainJar>smart-monitor-app-1.0.0.jar</mainJar>
+                    <input>target</input>
+                    <destination>output</destination>
+                    <type>APP_IMAGE</type>
+                    <winConsole>true</winConsole>
+                    <modulePaths>
+                        <modulePath>target/dependency</modulePath>
+                    </modulePaths>
+                    <addModules>
+                        <addModule>java.base</addModule>
+                        <addModule>java.desktop</addModule>
+                        <addModule>java.sql</addModule>
+                        <addModule>javafx.controls</addModule>
+                        <addModule>javafx.graphics</addModule>
+                        <addModule>javafx.base</addModule>
+                    </addModules>
+                    <javaOptions>
+                        <option>-Dfile.encoding=UTF-8</option>
+                    </javaOptions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
